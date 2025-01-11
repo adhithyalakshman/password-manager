@@ -1,0 +1,71 @@
+import random
+from tkinter import messagebox
+from tkinter import *
+
+
+#setting ui
+window=Tk()
+window.title("PASSWORD MANAGER")
+window.minsize(600,600)
+canva=Canvas(height=200,width=200,bg="white",highlightthickness=0)
+file=PhotoImage(file="logo.png")
+canva.create_image(100,100,image=file)
+canva.place(x=180,y=20)
+window.config(bg="white")
+website=Label(text="website:",width=20,font=("arial",15,"italic"),bg="white")
+website.place(x=0,y=250)
+username=Label(text="username/label:",width=20,font=("arial",15,"italic"),bg="white")
+username.place(x=0,y=300)
+password=Label(text="password:",width=20,font=("arial",15,"italic"),bg="white")
+password.place(x=0,y=350)
+wi=Entry(width=60,bg="white")
+wi.place(x=210,y=250)
+wi.focus()
+ui=Entry(width=60,bg="white")
+ui.place(x=210,y=300)
+ui.insert(0,"mymail@x.com")
+pi=Entry(width=30,bg="white")
+pi.place(x=210,y=350)
+# saving data to a file
+def saver():
+    with open("stored password",'a') as file:
+
+        a = wi.get()
+        b = ui.get()
+        c = pi.get()
+        if a and b and c:
+            ok = messagebox.askyesno(title=f"{a}",
+                                     message=f"username:{b}\n password:{c} \n are you ok with the details")
+            if ok:
+                wi.delete(0, END)
+                ui.delete(0, END)
+                pi.delete(0, END)
+                file.write(f"\n{a}|{b}|{c}")
+        else:
+            messagebox.showwarning(title="incomplete",message="please fill the recquired field")
+
+# function for password generating
+def generator():
+    i=[x for x in range(0,10)]
+    sc=[chr(y) for y in range(97,123)]
+    cc=[chr(z) for z in range(65,91)]
+    sy=[chr(z) for z in range(32,48)]
+    ranpass=[]
+    for j in range(0,4):
+        ranpass.append(random.choice(i))
+        ranpass.append(random.choice(sc))
+        ranpass.append(random.choice(cc))
+        ranpass.append(random.choice(sy))
+    random.shuffle(ranpass)
+    d=str(ranpass)
+    pi.delete(0, END)
+    pi.insert(0,ranpass)
+
+
+s=Button(width=60,text="          Add",bg="white",font=("arial",10,"bold"),command=saver)
+s.place(x=210,y=400)
+gb=Button(width=20,bg="white",text="Generate Password",font=("arial",10,"bold"),command=generator)
+gb.place(x=430,y=350)
+
+
+window.mainloop()
